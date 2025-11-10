@@ -7,7 +7,7 @@
 #define RCC_APB2ENR (*(volatile uint32_t*)0x40021018) //registro de encendidos perifericos
 	
 // GPIOx registros
-#define GPIOA_CRH   (*(volatile uint32_t*)0x40010804)  // configuración de pines PA8..PA15
+#define GPIOA_CRH   (*(volatile uint32_t*)0x40010804)  // configuraciÃ³n de pines PA8..PA15
 #define GPIOA_ODR   (*(volatile uint32_t*)0x4001080C)  // salida de datos (ODR)
 #define TIM1_CR1    (*(volatile uint32_t*)0x40012C00)  // control principal (CEN, DIR, etc.)
 	
@@ -20,13 +20,13 @@ extern void conf_clk(void); //funcion que configura el reloj
 extern void conf_spi(void); //funcion que configura la comunicacion spi
 extern void Transmite(uint8_t reg, uint8_t dato); //funcion para transmitir el dato al max7219
 extern void config_TIM(void); // configuracion del contador
-extern void apagarLEDS(void);
+extern void zerosLEDS(void);
 
 void config_ports(void); //prototipo del confiiguracion de puerto
 void TransmicionDeco(uint64_t variable); //variable de la transformacion del contador
 
 void config_ports(void){
-    GPIOA_CRH &= ~(0xF << 4);  // Limpiar configuración de PA9
+    GPIOA_CRH &= ~(0xF << 4);  // Limpiar configuraciÃ³n de PA9
 		GPIOA_CRH |=  (0x8 << 4);  // 1000b -> entrada con pull-up/down
 		GPIOA_ODR |= (0 << 9);     // Pull-up activado (PA9 = HIGH por defecto)
 }
@@ -60,7 +60,7 @@ int main(void) {
         // loop infinito
 			uint16_t contador = TIM1_CNT; //asignamos el contador a una variable
 		 if (contador == 0 ){
-			 apagarLEDS();
+			 zerosLEDS();
 		 }
 		 /*else if (contador == 65535){
 			TIM1_CR1 &= ~1;  // apaga el contador

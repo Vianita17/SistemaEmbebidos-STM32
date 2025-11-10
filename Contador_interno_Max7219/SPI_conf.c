@@ -6,7 +6,7 @@
 // ----------- Registros usados 
 #define RCC_APB2ENR (*(volatile uint32_t*) 0x40021018) //registro encendido perifericos
 #define GPIOA_CRL   (*(volatile uint32_t*) 0x40010800)	// registros pines 0-7
-#define GPIOA_ODR   (*(volatile uint32_t*) 0x4001080C)	// registros pines 8-15
+#define GPIOA_ODR   (*(volatile uint32_t*) 0x4001080C)	// registro de escritura pines
 #define GPIOA_BSRR  (*(volatile uint32_t*) 0x40010810)	// registros set/reset
 #define GPIOA_IDR   (*(volatile uint32_t*) 0x40010808)	// registros de lectura de pines
 
@@ -22,12 +22,13 @@ static inline void CS_HIGH(void) { GPIOA_BSRR = (1 << 4); } //load -> 1
 void conf_spi(void); //prototipo de todo la configuracion
 void spi1_tx(uint8_t data); //prototipo de captura de datos
 void Transmite(uint8_t reg, uint8_t dato); //enviar datos al max
-void apagarLEDS(void);
+void zerosLEDS(void);
 
 void conf_spi(void) {
     // 1) Habilitar reloj GPIOA y SPI1
     RCC_APB2ENR |= (1 << 2);   // GPIOA
     RCC_APB2ENR |= (1 << 12);  // SPI1
+		RCC_APB2ENR |= (1 << 0);
 
     // 2) Configurar PA4 (CS), PA5 (SCK), PA7 (MOSI)
     GPIOA_CRL &= ~((0xF << (4*4)) | (0xF << (4*5)) | (0xF << (4*7)));
@@ -46,19 +47,19 @@ void conf_spi(void) {
 
     // inicializar MAX7219
     Transmite(0x0C, 1);    // Shutdown ? normal operation
-    Transmite(0x09, 0xFF); // Decode mode BCD todos los dígitos
-    Transmite(0x0B, 7);    // Scan limit ? 8 dígitos
+    Transmite(0x09, 0xFF); // Decode mode BCD todos los dÃ­gitos
+    Transmite(0x0B, 7);    // Scan limit ? 8 dÃ­gitos
     Transmite(0x0A, 8);    // Intensidad ? media
 		Transmite(0x0F, 0);    // Display test ? off
 		
 		
 		//vamos apagar todos los led
-		apagarLEDS();
+		zerosLEDS();
 }
-void apagarLEDS(){ //funcion para apagar los led
+void zerosLEDS(){ //funcion para apagar los led
 	for (int i=1; i < 9; i++){
-			//Transmite( i, 0x00);    // display para que todos se pongan en ceros]
-			Transmite( i , 0x0F);    // display para que esten apagados
+			Transmite( i, 0x00);    // display para que todos se pongan en ceros]
+			//Transmite( i , 0x0F);    // display para que esten apagados
 		}
 }
 	

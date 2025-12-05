@@ -1,6 +1,7 @@
 #ifndef MAX_H
-#define	MAX_H                   // Evita múltiples inclusiones del archivo
+#define	MAX_H 
 
+// Evita múltiples inclusiones del archivo
 #include "tm4c1294ncpdt.h"      // Definiciones del microcontrolador Tiva C
 #include <stdint.h>             // Tipos enteros estándar
 
